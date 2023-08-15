@@ -48,3 +48,13 @@ def parameters_info(message):
     btn2 = types.KeyboardButton("Change parameters")
     markup.row(btn1, btn2)
     bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
+
+water_intake(weight, int(user_data[message.chat.id]["activitylev"]), message)
+
+def water_intake(weight, activitylev, message):
+    water_per_kg = 30
+    activity = [1, 1.3, 1.6, 1.9, 2.2]
+    water_needed = water_per_kg * weight * activity[activitylev - 1]
+    bot.send_message(message.chat.id, f"Your recommended daily water intake: {water_needed:.2f} ml")
+
+bot.polling(none_stop=True)
