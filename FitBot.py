@@ -82,5 +82,14 @@ def water_intake(weight, activitylev, message):
     activity = [1, 1.3, 1.6, 1.9, 2.2]
     water_needed = water_per_kg * weight * activity[activitylev - 1]
     bot.send_message(message.chat.id, f"Your recommended daily water intake: {water_needed:.2f} ml")
-    
+
+def bmr_info(message):
+    if gender_info.lower() == 'male':
+        bmr = 88.362 + (13.397 * float(weight_info)) + (4.799 * float(height_info)) - (5.677 * float(age_info))
+    elif gender_info.lower() == 'female':
+        bmr = 447.593 + (9.247 * float(weight_info)) + (3.098 * float(height_info)) - (4.330 * float(age_info))
+    else:
+        bmr = None  
+    bot.send_message(message.chat.id,bmr)  
+
 bot.polling(none_stop=True)
