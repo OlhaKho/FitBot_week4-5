@@ -75,5 +75,12 @@ def bmi_result(weight, height, message):
         explanation = "You are in the obese range☹️. For health reasons, it is important to monitor your weight.🥰"
     
     bot.send_message(message.chat.id, f"Your BMI: {bmi:.2f}\n{explanation}", reply_markup=types.ReplyKeyboardRemove())
+    water_intake(weight, int(user_data[message.chat.id]["activitylev"]), message)
+
+def water_intake(weight, activitylev, message):
+    water_per_kg = 30
+    activity = [1, 1.3, 1.6, 1.9, 2.2]
+    water_needed = water_per_kg * weight * activity[activitylev - 1]
+    bot.send_message(message.chat.id, f"Your recommended daily water intake: {water_needed:.2f} ml")
     
 bot.polling(none_stop=True)
