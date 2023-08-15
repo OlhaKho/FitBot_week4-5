@@ -48,3 +48,32 @@ def parameters_info(message):
     btn2 = types.KeyboardButton("Change parameters")
     markup.row(btn1, btn2)
     bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
+    
+@bot.message_handler(func=lambda message: message.text == "Change parameters")
+def change_parameters(message):
+    user_data.pop(message.chat.id, None)
+    user_data_age(message)
+
+@bot.message_handler(func=lambda message: message.text == "Confirm parameters")
+def confirm_parameters(message):
+    if message.chat.id in user_data:
+        data = user_data[message.chat.id]
+        bmi_result(data["weight"], data["height"], message)
+    else:
+        bot.send_message(message.chat.id, "No user data available.")
+
+def bmi_result(weight, height, message):
+    bmi = weight / ((height / 100) ** 2)
+    explanation = ""
+    if bmi < 18.5:
+        explanation = "You are underweight😞. You should talk to a doctor🙂."
+    elif 18.5 <= bmi < 24.9:
+        explanation = "Your BMI is normal.🥳 You should continue your healthy lifestyle🥰."
+    elif 25 <= bmi < 29.9:
+        explanation = "You are overweight😞. Stay focusing on healthy eating and exercise.🙂"
+    else:
+        explanation = "You are in the obese range☹️. For health reasons, it is important to monitor your weight.🥰"
+    
+    bot.send_message(message.chat.id, f"Your BMI: {bmi:.2f}\n{explanation}", reply_markup=types.ReplyKeyboardRemove())
+    
+bot.polling(none_stop=True)
